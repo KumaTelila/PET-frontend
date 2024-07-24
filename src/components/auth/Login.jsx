@@ -14,7 +14,7 @@ const Login = () => {
         <div className="card-body">
           <p className="login-box-msg">Sign in</p>
 
-          <form action="../../index3.html" method="post">
+          <form action="" method="post">
             <div className="input-group mb-3">
               <input type="email" className="form-control" placeholder="Email" />
               <div className="input-group-append">
@@ -39,7 +39,7 @@ const Login = () => {
               </div>
               {/* /.col */}
               <div className="col-4">
-                <button type="submit" className="btn btn-primary btn-block">Sign In</button>
+                <button type="submit" className="btn btn-primary btn-block" onClick={() => (console.log('clicked'))}>Sign In</button>
               </div>
               {/* /.col */}
             </div>
