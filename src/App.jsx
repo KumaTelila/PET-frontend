@@ -7,6 +7,7 @@ import Sidebar from "./components/Dashboard/Sidebar/Sidebar.jsx";
 import Navbar from "./components/Dashboard/Navbar/Navbar.jsx";
 import { SidebarItems } from "./components/Dashboard/Sidebar/common/sidebarData.jsx";
 import TransactionTable from "./components/Dashboard/Transaction/TransactionTable.jsx";
+import MainContent from "./components/Dashboard/Main_content/MainContent.jsx";
 
 function App() {
   const user = {
@@ -27,7 +28,7 @@ function App() {
         <Routes>
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<TransactionTable />} />
+          <Route path="/dashboard" element={<MainContent />} />
         </Routes>
       </div>
     </Router>
