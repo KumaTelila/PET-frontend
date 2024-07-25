@@ -1,56 +1,66 @@
-import React, { useState } from 'react';
-import api from '../../services/api';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import api from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [state, setState] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    successMessage: null
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    successMessage: null,
   });
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setState(prevState => ({
+    setState((prevState) => ({
       ...prevState,
-      [id]: value
+      [id]: value,
     }));
   };
-
+  
+  var message =  null
+  var newClass = "btn btn-primary btn-block"
   const handleSubmitClick = async (e) => {
     e.preventDefault();
     if (state.password === state.confirmPassword) {
       const payload = {
         name: state.name,
         email: state.email,
-        password: state.password
+        password: state.password,
       };
 
       try {
-        const response = await api.post('/register', payload);
+        const response = await api.post("/register", payload);
         if (response.status === 201) {
-          setState(prevState => ({
+          setState((prevState) => ({
             ...prevState,
-            successMessage: 'Registration successful. Redirecting to login page...'
+            successMessage: "Registration successful. Redirecting to Dashboard page...",
           }));
-          redirectToLogin();
+          message = "Registration successful. Redirecting to Dashboard page...";
+          localStorage.setItem("token", response.data.token);
+          navigate("/dashboard");
         }
       } catch (error) {
-        console.error('Registration error:', error.response.data);
-        alert('Registration failed. Please try again.');
+        console.error("Registration error:", error.response.data);
+        alert("Registration failed. Please try again.");
+        message = error.response.data.message;
       }
     } else {
-      alert('Passwords do not match.');
+      alert("Passwords do not match.");
+      message = "Passwords do not match.";
     }
   };
-
-  const redirectToLogin = () => {
-    navigate('/login');
+  const HandleAlert = () => {
+    if (message) {
+      if (message === "Registration successful. Redirecting to Dashboard page...") {
+        newClass = "btn-success swalDefaultSuccess"
+    }else{
+      newClass = "btn-danger swalDefaultError"
+    }
+    }
   };
-
   return (
     <div className="hold-transition register-page">
       <div className="register-box">
@@ -139,7 +149,7 @@ const Register = () => {
                 </div>
                 {/* /.col */}
                 <div className="col-4">
-                  <button type="submit" className="btn btn-primary btn-block">
+                  <button type="submit" onClick={HandleAlert} className={newClass}>
                     Sign up
                   </button>
                 </div>

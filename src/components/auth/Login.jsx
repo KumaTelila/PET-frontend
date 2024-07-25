@@ -3,6 +3,7 @@ import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  var message = null
   const [state, setState] = useState({
     email: '',
     password: '',
@@ -32,7 +33,8 @@ const Login = () => {
       }
     } catch (error) {
       console.error('Login error:', error.response.data);
-      alert('Login failed. Please try again.');
+      message = error.response.data.message;
+      alert('Login failed. Please try again.' + message);
     }
   };
 

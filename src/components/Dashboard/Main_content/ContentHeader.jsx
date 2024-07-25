@@ -1,7 +1,23 @@
 import React from "react";
+import Navbar from "../Navbar/Navbar";
+import Sidebar from "../Sidebar/Sidebar";
+import { SidebarItems } from "../Sidebar/common/sidebarData";
 
 const ContentHeader = ({ title, breadcrumb }) => {
+  const user = {
+    imageUrl: "dist/img/user2-160x160.jpg",
+    name: "Alexander Pierce",
+  };
+  const brand = {
+    imageUrl: "dist/img/AdminLTELogo.png",
+    name: "PET",
+  };
   return (
+    <>
+    <Navbar/>
+    <Sidebar
+     items={SidebarItems} user={user} brand={brand}
+    />
     <div className="content-header">
       <div className="container-fluid">
         <div className="row mb-2">
@@ -19,6 +35,7 @@ const ContentHeader = ({ title, breadcrumb }) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

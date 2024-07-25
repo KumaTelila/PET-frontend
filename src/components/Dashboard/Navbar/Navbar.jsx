@@ -1,5 +1,10 @@
 import React from 'react';
 
+const LogOut = () => {
+  localStorage.clear();
+  window.location.href = '/login';
+}
+
 const Navbar = () => {
   return (
     <nav className="main-header navbar navbar-expand navbar-white navbar-light">
@@ -17,7 +22,7 @@ const Navbar = () => {
       {/* Right navbar links */}
       <ul className="navbar-nav ml-auto">
         <li className="nav-item">
-          <button type="submit" className="btn btn-primary btn-block">
+          <button type="submit" onClick={LogOut} className="btn btn-primary btn-block">
             <i className="fas fa-sign-out-alt pr-2"></i>Log out
           </button>
         </li>

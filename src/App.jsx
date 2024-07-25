@@ -1,13 +1,21 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AppHeader from "./components/appHeader/appHeader.jsx";
-import Login from "./components/auth/Login.jsx";
-import Register from "./components/auth/Register.jsx";
-import Sidebar from "./components/Dashboard/Sidebar/Sidebar.jsx";
-import Navbar from "./components/Dashboard/Navbar/Navbar.jsx";
-import { SidebarItems } from "./components/Dashboard/Sidebar/common/sidebarData.jsx";
-import MainContent from "./components/Dashboard/Main_content/MainContent.jsx";
-import ChartsDashboard from "./components/Dashboard/Charts/ChartsDashboard.jsx";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './components/auth/Login.jsx';
+import Register from './components/auth/Register.jsx';
+import Sidebar from './components/Dashboard/Sidebar/Sidebar.jsx';
+import { SidebarItems } from './components/Dashboard/Sidebar/common/sidebarData.jsx';
+import MainContent from './components/Dashboard/Main_content/MainContent.jsx';
+import ChartsDashboard from './components/Dashboard/Charts/ChartsDashboard.jsx';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+
+function ProtectedRoute({ children }) {
+  const isAuthenticated = !!localStorage.getItem('token'); // Check for token
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+}
 
 function App() {
   const user = {
@@ -18,18 +26,18 @@ function App() {
     imageUrl: "dist/img/AdminLTELogo.png",
     name: "PET",
   };
-  const isLoggedIn = true;
+  const MySwal = withReactContent(Swal);
+
+  // ... (your sweetalert code if needed)
 
   return (
     <Router>
       <div className="wrapper">
-        {isLoggedIn && <Navbar />}
-        {isLoggedIn && <Sidebar items={SidebarItems} user={user} brand={brand} />}
         <Routes>
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/expenses" element={<MainContent />} />
-          <Route path="/dashboard" element={<ChartsDashboard />} />
+          <Route path="/expenses" element={<ProtectedRoute><MainContent /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><ChartsDashboard /></ProtectedRoute>} />
         </Routes>
       </div>
     </Router>
