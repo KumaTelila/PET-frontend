@@ -8,7 +8,9 @@ const AddExpenseForm = () => {
     description: '',
   });
 
-  const categories = ['Groceries', 'Utilities', 'Entertainment', 'Transport', 'Dining', 'Miscellaneous'];
+  const [categories, setCategories] = useState(['Groceries', 'Utilities', 'Entertainment', 'Transport', 'Dining', 'Miscellaneous']);
+  const [newCategory, setNewCategory] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,6 +18,18 @@ const AddExpenseForm = () => {
       ...formData,
       [name]: value,
     });
+  };
+
+  const handleNewCategoryChange = (e) => {
+    setNewCategory(e.target.value);
+  };
+
+  const handleAddNewCategory = () => {
+    if (newCategory.trim() !== '') {
+      setCategories([...categories, newCategory.trim()]);
+      setNewCategory('');
+      setIsModalOpen(false);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -53,20 +67,34 @@ const AddExpenseForm = () => {
         </div>
         <div className="form-group">
           <label htmlFor="category">Category</label>
-          <select
-            className="form-control"
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-          >
-            <option value="">Select category</option>
-            {categories.map((category, index) => (
-              <option key={index} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
+          <ul className='navbar nav'>
+            <li className='nav-item mr-4'>
+              <select
+                className="form-control"
+                id="category"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+              >
+                <option value="">Select category</option>
+                {categories.map((category, index) => (
+                  <option key={index} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </li>
+            <li className='nav-item '>
+              <button
+                className="btn btn-primary btn-sm m-1"
+                type="button"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <i className="m-1 fas fa-plus"></i>
+                Add New Category
+              </button>
+            </li>
+          </ul>
         </div>
         <div className="form-group">
           <label htmlFor="description">Description</label>
@@ -88,6 +116,44 @@ const AddExpenseForm = () => {
           Save changes
         </button>
       </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="modal show d-block" tabIndex="-1" role="dialog">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Add New Category</h5>
+                <button
+                  type="button"
+                  className="close"
+                  onClick={() => setIsModalOpen(false)}
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <div className="form-group">
+                  <label htmlFor="newCategory">New Category</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="newCategory"
+                    value={newCategory}
+                    onChange={handleNewCategoryChange}
+                    placeholder="Enter new category"
+                  />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => setIsModalOpen(false)}>Close</button>
+                <button type="button" className="btn btn-primary" onClick={handleAddNewCategory}>Add Category</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </form>
   );
 };
