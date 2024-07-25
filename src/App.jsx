@@ -6,9 +6,7 @@ import Register from "./components/auth/Register.jsx";
 import Sidebar from "./components/Dashboard/Sidebar/Sidebar.jsx";
 import Navbar from "./components/Dashboard/Navbar/Navbar.jsx";
 import { SidebarItems } from "./components/Dashboard/Sidebar/common/sidebarData.jsx";
-import TransactionTable from "./components/Dashboard/Transaction/TransactionTable.jsx";
 import MainContent from "./components/Dashboard/Main_content/MainContent.jsx";
-import LineChartOfExpense from "./components/Dashboard/Charts/LineChartOfExpense.jsx";
 import ChartsDashboard from "./components/Dashboard/Charts/ChartsDashboard.jsx";
 
 function App() {
