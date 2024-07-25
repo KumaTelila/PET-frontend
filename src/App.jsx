@@ -8,6 +8,8 @@ import Navbar from "./components/Dashboard/Navbar/Navbar.jsx";
 import { SidebarItems } from "./components/Dashboard/Sidebar/common/sidebarData.jsx";
 import TransactionTable from "./components/Dashboard/Transaction/TransactionTable.jsx";
 import MainContent from "./components/Dashboard/Main_content/MainContent.jsx";
+import LineChartOfExpense from "./components/Dashboard/Charts/LineChartOfExpense.jsx";
+import ChartsDashboard from "./components/Dashboard/Charts/ChartsDashboard.jsx";
 
 function App() {
   const user = {
@@ -28,7 +30,8 @@ function App() {
         <Routes>
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<MainContent />} />
+          <Route path="/expenses" element={<MainContent />} />
+          <Route path="/dashboard" element={<ChartsDashboard />} />
         </Routes>
       </div>
     </Router>
