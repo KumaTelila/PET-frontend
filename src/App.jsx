@@ -8,6 +8,7 @@ import MainContent from './components/Dashboard/Main_content/MainContent.jsx';
 import ChartsDashboard from './components/Dashboard/Charts/ChartsDashboard.jsx';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import Home from './components/landing/Home.jsx';
 
 function ProtectedRoute({ children }) {
   const isAuthenticated = !!localStorage.getItem('token'); // Check for token
@@ -34,6 +35,7 @@ function App() {
     <Router>
       <div className="wrapper">
         <Routes>
+          <Route path = '/' element = {<Home/>} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/expenses" element={<ProtectedRoute><MainContent /></ProtectedRoute>} />
