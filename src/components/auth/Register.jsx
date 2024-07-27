@@ -7,8 +7,8 @@ import Swal from "sweetalert2";
 // registration with react query
 const register = async ({ name, email, password }) => {
   const response = await api.post("/register", { name, email, password });
-  return response.data; 
-}
+  return response.data;
+};
 
 const Register = () => {
   const [state, setState] = useState({
@@ -27,7 +27,7 @@ const Register = () => {
       [id]: value,
     }));
   };
-  
+
   const mutation = useMutation({
     mutationFn: register,
     onSuccess: (data) => {
@@ -46,10 +46,8 @@ const Register = () => {
         text: error.response.data.message,
       });
     },
-  })
+  });
 
-  var message =  null
-  var newClass = "btn btn-primary btn-block"
   const handleSubmitClick = async (e) => {
     e.preventDefault();
     if (state.password === state.confirmPassword) {
@@ -64,7 +62,7 @@ const Register = () => {
         icon: "error",
         title: "Oops...",
         text: "Passwords do not match!",
-      })
+      });
     }
   };
   return (
@@ -72,7 +70,7 @@ const Register = () => {
       <div className="register-box">
         <div className="card card-outline card-primary">
           <div className="card-header text-center">
-            <a href="../../index2.html" className="h1">
+            <a href="/dashboard" className="h1">
               <b>P</b>ET
             </a>
           </div>
@@ -80,7 +78,8 @@ const Register = () => {
             <p className="login-box-msg">Sign up to get services</p>
             <form onSubmit={handleSubmitClick}>
               <div className="input-group mb-3">
-                <input required
+                <input
+                  required
                   type="text"
                   className="form-control"
                   placeholder="Full name"
@@ -95,7 +94,8 @@ const Register = () => {
                 </div>
               </div>
               <div className="input-group mb-3">
-                <input required
+                <input
+                  required
                   type="email"
                   className="form-control"
                   placeholder="Email"
@@ -110,7 +110,8 @@ const Register = () => {
                 </div>
               </div>
               <div className="input-group mb-3">
-                <input required
+                <input
+                  required
                   type="password"
                   className="form-control"
                   placeholder="Password"

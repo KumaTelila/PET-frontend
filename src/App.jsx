@@ -10,11 +10,12 @@ import ChartsDashboard from './components/Dashboard/Charts/ChartsDashboard.jsx';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import Home from './components/landing/Home.jsx';
+import { useSelector } from 'react-redux';
 
 function ProtectedRoute({ children }) {
-  const isAuthenticated = !!localStorage.getItem('token'); // Check for token
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+  const user = useSelector((state) => state.user.user);
+  if (!user) {
+    return <Navigate to="/login" />;
   }
   return children;
 }

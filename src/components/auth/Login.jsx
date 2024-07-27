@@ -1,19 +1,25 @@
 import React, { useState } from "react";
-import api from "../../services/api";
+import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
+import api from "../../services/api";
 import Swal from "sweetalert2";
+import { jwtDecode } from "jwt-decode";
+import { loginSuccess } from "../../middleware/slices/userSlice";
 
 const login = async ({ email, password }) => {
   const response = await api.post("/login", { email, password });
   return response.data;
 };
+
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [state, setState] = useState({
     email: "",
     password: "",
   });
+
   const handleChange = (e) => {
     const { id, value } = e.target;
     setState((prevState) => ({
@@ -26,7 +32,8 @@ const Login = () => {
     mutationFn: login,
     onSuccess: (data) => {
       localStorage.setItem("token", data.token);
-      // localStorage.setItem("user", JSON.stringify(data.user));
+      const decodedUser = jwtDecode(data.token);
+      dispatch(loginSuccess(decodedUser));  // Save user info in Redux
       navigate("/dashboard");
       Swal.fire({
         icon: "success",
@@ -43,7 +50,8 @@ const Login = () => {
       });
     },
   });
-  const handleSubmitClick =  (e) => {
+
+  const handleSubmitClick = (e) => {
     e.preventDefault();
     mutation.mutate(state);
   };

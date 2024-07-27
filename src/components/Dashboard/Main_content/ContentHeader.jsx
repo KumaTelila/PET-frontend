@@ -2,55 +2,32 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import Sidebar from "../Sidebar/Sidebar";
 import { SidebarItems } from "../Sidebar/common/sidebarData";
-import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
-import fetchUser from "../../Functions/FetchUser";
-
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 const ContentHeader = ({ title, breadcrumb }) => {
-  // Fetch user information from the server to ensure the data is up-to-date
-  const { data: user, error, isLoading } = useQuery({
-    queryKey: ['user'], 
-    queryFn: fetchUser
-  });
-
+  const user = useSelector((state) => state.user.user);
+  const navigate = useNavigate();
   useEffect(() => {
-    if (isLoading) {
-      Swal.fire({
-        title: "Loading...",
-        text: "Fetching user information...",
-        allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-        },
-      });
-    } else {
-      Swal.close();
-    }
-  }, [isLoading]);
-
-  useEffect(() => {
-    if (error) {
+    if (!user) {
       Swal.fire({
         icon: "error",
-        title: "Error fetching user information",
-        text: error.response ? error.response.data.message : " error",
+        title: "Error",
+        text: "No user found. Please log in.",
+      }).then(() => {
+        navigate("/login");
       });
     }
-  }, [error]);
+  }, [user, navigate]);
 
   const brand = {
     imageUrl: "dist/img/AdminLTELogo.png",
     name: "PET",
   };
-
-  if (isLoading || error || !user) {
-    return null; // You can return a loader or an error message here if desired
-  }
-
   return (
     <>
       <Navbar />
-      <Sidebar items={SidebarItems} user={user} brand={brand} />
+      <Sidebar items={SidebarItems} user={user.user} brand={brand} />
       <div className="content-header">
         <div className="container-fluid">
           <div className="row mb-2">

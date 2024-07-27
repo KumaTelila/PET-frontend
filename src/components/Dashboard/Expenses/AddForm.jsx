@@ -1,15 +1,30 @@
-import React, { useState } from 'react';
+import { useMutation } from "@tanstack/react-query";
+import React, { useState } from "react";
+import api from "../../../services/api";
+import Swal from "sweetalert2";
+
+const addExpense = async (expenseData) => {
+  const response = await api.post("/add-expense", expenseData);
+  return response.data;
+};
 
 const AddExpenseForm = () => {
   const [formData, setFormData] = useState({
-    date: '',
-    amount: '',
-    category: '',
-    description: '',
+    date: "",
+    amount: "",
+    category: "",
+    description: "",
   });
 
-  const [categories, setCategories] = useState(['Groceries', 'Utilities', 'Entertainment', 'Transport', 'Dining', 'Miscellaneous']);
-  const [newCategory, setNewCategory] = useState('');
+  const [categories, setCategories] = useState([
+    "Groceries",
+    "Utilities",
+    "Entertainment",
+    "Transport",
+    "Dining",
+    "Miscellaneous",
+  ]);
+  const [newCategory, setNewCategory] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleChange = (e) => {
@@ -25,17 +40,42 @@ const AddExpenseForm = () => {
   };
 
   const handleAddNewCategory = () => {
-    if (newCategory.trim() !== '') {
+    if (newCategory.trim() !== "") {
       setCategories([...categories, newCategory.trim()]);
-      setNewCategory('');
+      setNewCategory("");
       setIsModalOpen(false);
     }
   };
 
+  const mutatuion = useMutation({
+    mutationFn: addExpense,
+    onSuccess: () => {
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Expense added successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setFormData({
+        date: "",
+        amount: "",
+        category: "",
+        description: "",
+      });
+    },
+    onError: (error) => {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.response.data.message,
+      });
+    },
+  });
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log(formData);
+    mutatuion.mutate(formData);
   };
 
   return (
@@ -67,8 +107,8 @@ const AddExpenseForm = () => {
         </div>
         <div className="form-group">
           <label htmlFor="category">Category</label>
-          <ul className='navbar nav'>
-            <li className='nav-item mr-4'>
+          <ul className="navbar nav">
+            <li className="nav-item mr-4">
               <select
                 className="form-control"
                 id="category"
@@ -84,7 +124,7 @@ const AddExpenseForm = () => {
                 ))}
               </select>
             </li>
-            <li className='nav-item '>
+            <li className="nav-item ">
               <button
                 className="btn btn-primary btn-sm m-1"
                 type="button"
@@ -147,8 +187,20 @@ const AddExpenseForm = () => {
                 </div>
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setIsModalOpen(false)}>Close</button>
-                <button type="button" className="btn btn-primary" onClick={handleAddNewCategory}>Add Category</button>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleAddNewCategory}
+                >
+                  Add Category
+                </button>
               </div>
             </div>
           </div>
