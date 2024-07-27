@@ -1,10 +1,19 @@
 import React, { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Chart from "chart.js/auto";
 import ContentHeader from "../Main_content/ContentHeader";
+import { fetchExpenses } from "../../../middleware/slices/expenseSlice"; 
 
 const ChartsDashboard = () => {
+  const dispatch = useDispatch();
+  const { expenses } = useSelector((state) => state.expenses);
+  
   const pieChartRef = useRef(null);
   const lineChartRef = useRef(null);
+
+  useEffect(() => {
+    dispatch(fetchExpenses());
+  }, [dispatch]);
 
   useEffect(() => {
     // Destroy previous chart instances if they exist
@@ -15,15 +24,23 @@ const ChartsDashboard = () => {
       lineChartRef.current.destroy();
     }
 
+    // Transform the data for pie chart (category distribution)
+    const categoryData = expenses.reduce((acc, expense) => {
+      acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
+      return acc;
+    }, {});
+    const pieLabels = Object.keys(categoryData);
+    const pieData = Object.values(categoryData);
+
     // Pie Chart
     const pieCtx = document.getElementById("pieChart").getContext("2d");
     pieChartRef.current = new Chart(pieCtx, {
       type: "pie",
       data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        labels: pieLabels,
         datasets: [
           {
-            data: [12, 19, 3, 5, 2, 3],
+            data: pieData,
             backgroundColor: [
               "#FF6384",
               "#36A2EB",
@@ -45,16 +62,20 @@ const ChartsDashboard = () => {
       },
     });
 
+    // Transform the data for line chart (expenses over time)
+    const lineLabels = expenses.map((expense) => new Date(expense.date).toLocaleDateString());
+    const lineData = expenses.map((expense) => expense.amount);
+
     // Line Chart
     const lineCtx = document.getElementById("lineChart").getContext("2d");
     lineChartRef.current = new Chart(lineCtx, {
       type: "line",
       data: {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        labels: lineLabels,
         datasets: [
           {
-            label: "Sales",
-            data: [65, 59, 80, 81, 56, 55, 40],
+            label: "Expenses",
+            data: lineData,
             fill: false,
             borderColor: "rgba(75,192,192,1)",
             tension: 0.1,
@@ -72,7 +93,7 @@ const ChartsDashboard = () => {
         lineChartRef.current.destroy();
       }
     };
-  }, []);
+  }, [expenses]);
 
   return (
     <>
@@ -85,7 +106,7 @@ const ChartsDashboard = () => {
                 {/* PIE CHART */}
                 <div className="card card-danger">
                   <div className="card-header">
-                    <h3 className="card-title">Pie Chart</h3>
+                    <h3 className="card-title">Category Expenses</h3>
                     <div className="card-tools">
                       <button
                         type="button"
@@ -125,7 +146,7 @@ const ChartsDashboard = () => {
                 {/* LINE CHART */}
                 <div className="card card-info">
                   <div className="card-header">
-                    <h3 className="card-title">Line Chart</h3>
+                    <h3 className="card-title">Expenses over time</h3>
                     <div className="card-tools">
                       <button
                         type="button"
