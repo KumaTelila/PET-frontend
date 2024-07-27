@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import Swal from "sweetalert2";
+
+// registration with react query
+const register = async ({ name, email, password }) => {
+  const response = await api.post("/register", { name, email, password });
+  return response.data; 
+}
 
 const Register = () => {
   const [state, setState] = useState({
@@ -20,6 +28,26 @@ const Register = () => {
     }));
   };
   
+  const mutation = useMutation({
+    mutationFn: register,
+    onSuccess: (data) => {
+      navigate("/login");
+      Swal.fire({
+        icon: "success",
+        title: "Registration successful!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    },
+    onError: (error) => {
+      Swal.fire({
+        icon: "error",
+        title: "Registration failed!",
+        text: error.response.data.message,
+      });
+    },
+  })
+
   var message =  null
   var newClass = "btn btn-primary btn-block"
   const handleSubmitClick = async (e) => {
@@ -30,35 +58,13 @@ const Register = () => {
         email: state.email,
         password: state.password,
       };
-
-      try {
-        const response = await api.post("/register", payload);
-        if (response.status === 201) {
-          setState((prevState) => ({
-            ...prevState,
-            successMessage: "Registration successful. Redirecting to Dashboard page...",
-          }));
-          message = "Registration successful. Redirecting to Dashboard page...";
-          localStorage.setItem("token", response.data.token);
-          navigate("/dashboard");
-        }
-      } catch (error) {
-        console.error("Registration error:", error.response.data);
-        alert("Registration failed. Please try again.");
-        message = error.response.data.message;
-      }
+      mutation.mutate(payload);
     } else {
-      alert("Passwords do not match.");
-      message = "Passwords do not match.";
-    }
-  };
-  const HandleAlert = () => {
-    if (message) {
-      if (message === "Registration successful. Redirecting to Dashboard page...") {
-        newClass = "btn-success swalDefaultSuccess"
-    }else{
-      newClass = "btn-danger swalDefaultError"
-    }
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Passwords do not match!",
+      })
     }
   };
   return (
@@ -149,7 +155,7 @@ const Register = () => {
                 </div>
                 {/* /.col */}
                 <div className="col-4">
-                  <button type="submit" onClick={HandleAlert} className={newClass}>
+                  <button type="submit" className="btn btn-primary btn-block">
                     Sign up
                   </button>
                 </div>
