@@ -80,7 +80,7 @@ const Register = () => {
             <p className="login-box-msg">Sign up to get services</p>
             <form onSubmit={handleSubmitClick}>
               <div className="input-group mb-3">
-                <input
+                <input required
                   type="text"
                   className="form-control"
                   placeholder="Full name"
@@ -95,7 +95,7 @@ const Register = () => {
                 </div>
               </div>
               <div className="input-group mb-3">
-                <input
+                <input required
                   type="email"
                   className="form-control"
                   placeholder="Email"
@@ -110,7 +110,7 @@ const Register = () => {
                 </div>
               </div>
               <div className="input-group mb-3">
-                <input
+                <input required
                   type="password"
                   className="form-control"
                   placeholder="Password"
@@ -126,6 +126,7 @@ const Register = () => {
               </div>
               <div className="input-group mb-3">
                 <input
+                  required
                   type="password"
                   className="form-control"
                   placeholder="Retype password"
