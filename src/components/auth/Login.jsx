@@ -61,7 +61,7 @@ const Login = () => {
       <div className="login-box">
         <div className="card card-outline card-primary">
           <div className="card-header text-center">
-            <a href="../../index2.html" className="h1">
+            <a href="/dashboard" className="h1">
               <b>P</b>ET
             </a>
           </div>
@@ -113,7 +113,7 @@ const Login = () => {
               </div>
             </form>
             <p className="mb-1">
-              <a href="#">I forgot my password</a>
+              <a href="/forgot-password">I forgot my password</a>
             </p>
             <p className="mb-0">
               <a href="/register" className="text-center">

@@ -69,10 +69,8 @@ const Register = () => {
     <div className="hold-transition register-page">
       <div className="register-box">
         <div className="card card-outline card-primary">
-          <div className="card-header text-center">
-            <a href="/dashboard" className="h1">
+          <div className="card-header text-center h1">
               <b>P</b>ET
-            </a>
           </div>
           <div className="card-body">
             <p className="login-box-msg">Sign up to get services</p>
@@ -151,7 +149,7 @@ const Register = () => {
                       value="agree"
                     />
                     <label htmlFor="agreeTerms">
-                      I agree to the <a href="#">terms</a>
+                      I agree to the <a href="/terms">terms</a>
                     </label>
                   </div>
                 </div>

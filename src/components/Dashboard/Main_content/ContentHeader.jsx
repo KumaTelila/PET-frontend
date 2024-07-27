@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Navbar from "../Navbar/Navbar";
 import Sidebar from "../Sidebar/Sidebar";
 import { SidebarItems } from "../Sidebar/common/sidebarData";
@@ -37,7 +37,7 @@ const ContentHeader = ({ title, breadcrumb }) => {
             <div className="col-sm-6">
               <ol className="breadcrumb float-sm-right">
                 <li className="breadcrumb-item">
-                  <a href="#">Home</a>
+                  <a href="/dashboard">Home</a>
                 </li>
                 <li className="breadcrumb-item active">{breadcrumb}</li>
               </ol>

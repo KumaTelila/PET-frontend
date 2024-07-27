@@ -21,15 +21,15 @@ const CardBody = ({ tableId, tableClass, data }) => {
               <td>{row.category}</td>
               <td>{row.description}</td>
               <td className="project-actions text-right">
-                <a className="btn btn-primary btn-sm m-1" href="#">
+                <a className="btn btn-primary btn-sm m-1" href="/view/">
                   <i class="fas fa-eye"></i>
                   View
                 </a>
-                <a className="btn btn-info btn-sm m-1" href="#">
+                <a className="btn btn-info btn-sm m-1" href="/edit">
                   <i class="fas fa-pencil-alt"></i>
                   Edit
                 </a>
-                <a className="btn btn-danger btn-sm m-1" href="#">
+                <a className="btn btn-danger btn-sm m-1" href="/delete">
                   <i class="fas fa-trash"></i>
                   Delete
                 </a>
