@@ -2,9 +2,15 @@ import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
 import api from "../../../services/api";
 import Swal from "sweetalert2";
+import { Navigate } from "react-router-dom";
 
 const addExpense = async (expenseData) => {
-  const response = await api.post("/add-expense", expenseData);
+  const token = localStorage.getItem('token');
+      const response = await api.post('/add-expense', expenseData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
   return response.data;
 };
 
@@ -63,6 +69,7 @@ const AddExpenseForm = () => {
         category: "",
         description: "",
       });
+      Navigate("/expenses");
     },
     onError: (error) => {
       Swal.fire({

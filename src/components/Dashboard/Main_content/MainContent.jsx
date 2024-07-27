@@ -2,6 +2,12 @@ import React from 'react';
 import Card from './Card';
 import ContentHeader from './ContentHeader';
 import CardHeader from './CardHeader';
+import { useQuery } from '@tanstack/react-query';
+import api from '../../../services/api';
+import Swal from 'sweetalert2';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchExpenses } from '../../../middleware/slices/expenseSlice';
 
 const data1 = [
   { date: '2024-07-01', amount: 45.00, category: 'Groceries', description: 'Supermarket shopping' },
@@ -17,8 +23,70 @@ const data1 = [
   // Add more data as needed
 ];
 
+// fetch users expenses
+// const fetchExpenses = async () => {
+//   const token = localStorage.getItem('token');
+//   const response = await api.get('/expenses', {
+//     headers: {
+//       Authorization: `Bearer ${token}`,
+//     },
+//   });
+//   return response.data;
+// };
+
 
 const MainContent = () => {
+
+  // state to store users expenses
+  // const {data, error, isLoading} = useQuery({
+  //   queryFn: fetchExpenses,
+  //   queryKey: ['expenses'],    
+  // })
+
+  // if (isLoading) {
+  //   Swal.fire({
+  //     icon: "info",
+  //     title: "Loading...",
+  //     text: "Please wait while we load your expenses",
+  //   });
+  // };
+
+  // if (error) {
+  //   Swal.fire({
+  //     icon: "error",
+  //     title: "Error",
+  //     text: error.response.data.message,
+  //   });
+  // };
+  const dispatch = useDispatch();
+  const { expenses, loading, error } = useSelector((state) => state.expenses);
+
+  useEffect(() => {
+    dispatch(fetchExpenses());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (loading) {
+      Swal.fire({
+        title: 'Loading...',
+        text: 'Fetching expenses data...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else {
+      Swal.close();
+    }
+
+    if (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error fetching expenses',
+        text: error,
+      });
+    }
+  }, [loading, error]);
   return (
     <>
     <div className='content-wrapper'>
@@ -36,7 +104,7 @@ const MainContent = () => {
               headerTitle="Expenses"
               tableId="example1"
               tableClass="table table-bordered table-striped"
-              data={data1}
+              data={expenses}
             />
           </div>
         </div>
