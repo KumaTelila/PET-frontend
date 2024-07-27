@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import Swal from "sweetalert2";
 
+const login = async ({ email, password }) => {
+  const response = await api.post("/login", { email, password });
+  return response.data;
+};
 const Login = () => {
-  var message = null
-  const [state, setState] = useState({
-    email: '',
-    password: '',
-  });
   const navigate = useNavigate();
-
+  const [state, setState] = useState({
+    email: "",
+    password: "",
+  });
   const handleChange = (e) => {
     const { id, value } = e.target;
     setState((prevState) => ({
@@ -18,24 +22,29 @@ const Login = () => {
     }));
   };
 
-  const handleSubmitClick = async (e) => {
+  const mutation = useMutation({
+    mutationFn: login,
+    onSuccess: (data) => {
+      localStorage.setItem("token", data.token);
+      navigate("/dashboard");
+      Swal.fire({
+        icon: "success",
+        title: "Login successful!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    },
+    onError: (error) => {
+      Swal.fire({
+        icon: "error",
+        title: "Login failed!",
+        text: error.response.data.message,
+      });
+    },
+  });
+  const handleSubmitClick =  (e) => {
     e.preventDefault();
-    const payload = {
-      email: state.email,
-      password: state.password,
-    };
-
-    try {
-      const response = await api.post('/login', payload);
-      if (response.status === 200) {
-        localStorage.setItem('token', response.data.token);
-        navigate('/dashboard');
-      }
-    } catch (error) {
-      console.error('Login error:', error.response.data);
-      message = error.response.data.message;
-      alert('Login failed. Please try again.' + message);
-    }
+    mutation.mutate(state);
   };
 
   return (
@@ -83,13 +92,8 @@ const Login = () => {
               <div className="row">
                 <div className="col-8">
                   <div className="icheck-primary">
-                    <input
-                      type="checkbox"
-                      id="remember"
-                    />
-                    <label htmlFor="remember">
-                      Remember Me
-                    </label>
+                    <input type="checkbox" id="remember" />
+                    <label htmlFor="remember">Remember Me</label>
                   </div>
                 </div>
                 <div className="col-4">
@@ -103,7 +107,9 @@ const Login = () => {
               <a href="#">I forgot my password</a>
             </p>
             <p className="mb-0">
-              <a href="/register" className="text-center">Register a new membership</a>
+              <a href="/register" className="text-center">
+                Register a new membership
+              </a>
             </p>
           </div>
         </div>
