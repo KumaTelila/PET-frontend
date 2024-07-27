@@ -1,11 +1,19 @@
 import React from 'react';
-
-const LogOut = () => {
-  localStorage.clear();
-  window.location.href = '/login';
-}
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const Logout = () => {
+    localStorage.removeItem("token");
+    Swal.fire({
+      icon: "success",
+      title: "Logout successful!",
+      showConfirmButton: false,
+      timer: 1500,
+    })
+    navigate("/login"); 
+  }
   return (
     <nav className="main-header navbar navbar-expand navbar-white navbar-light">
       {/* Left navbar links */}
@@ -22,7 +30,7 @@ const Navbar = () => {
       {/* Right navbar links */}
       <ul className="navbar-nav ml-auto">
         <li className="nav-item">
-          <button type="submit" onClick={LogOut} className="btn btn-primary btn-block">
+          <button type="submit" onClick={Logout} className="btn btn-primary btn-block">
             <i className="fas fa-sign-out-alt pr-2"></i>Log out
           </button>
         </li>
