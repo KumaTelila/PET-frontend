@@ -7,8 +7,8 @@ const Sidebar = ({ items, user, brand}) => {
   return (
     <aside className="main-sidebar sidebar-dark-primary elevation-4">
         <BrandLogo brandName={brand.name} />
-      <div className="sidebar">
-        <UserPanel imageUrl={user.imageUrl} userName={user.name} />
+      <div className="sidebar mt-2">
+        <UserPanel userName={user.name} />
         <nav className="mt-2">
           <ul
             className="nav nav-pills nav-sidebar flex-column"
